@@ -16,6 +16,11 @@ struct studentas
    double* rez;
    double* rez2;
 };
+   int *paz[100];
+   int *pazkiek;
+   double* rez; //su vidurkiu
+   double* rez2; //su mediana
+}s[100];
 
 int main()
 {
@@ -56,12 +61,28 @@ int main()
     cout<<"Iveskite studentu vardus ir pavardes bei 4 gautus pazymius (pirmi 3 n.d, 4-tas egzaminas):"<<std::endl;
     cin>>*A.var>>*A.pav;
     for(int i=0; i<4; i++)
+    int i=0; //studento numeriui saugoti
+    int j=0; //pazymiu kiekiui saugoti
+    string v, p;
+    int pz;
+
+    while(i<100)
     {
       
         cin>>A.paz[i];
         A.rez2[i]=A.paz[i];
         if(i!=3) *A.rez+=A.paz[i];
         if(i==2) 
+        cout<<"Iveskite studento varda ir pavarde, jei norite baigti ivedima, iveskite 0: "<<std::endl;
+        cin>>v;
+        if(v=="0") break;
+        cin>>p;
+        s[i].var=new string[100];
+        s[i].pav=new string[100];
+        *s[i].var = v;
+        *s[i].pav = p;
+        cout<<"Iveskite studento pazymius, is kuriu paskutinis yra jo egzamino pazymys, jei norite baigti ivedima, iveskite 0: "<<std::endl;
+        while(j<100)
         {
             *A.rez=0.4*((*A.rez)/3);
             for(int j=0; j<3; j++)
@@ -71,12 +92,44 @@ int main()
                     if(A.rez2[j]<A.rez2[ii]) std::swap(A.rez2[j], A.rez2[ii]);
                 }
             }
+            cin>>pz;
+            if(pz==0) break;
+            s[i].paz[j] = new int;
+            *s[i].paz[j] = pz;
+            j++;
         }
         if(i==3) *A.rez+=0.6*A.paz[i];
+        s[i].pazkiek = new int;
+        *s[i].pazkiek = j;
+        j=0;
+        i++;
     }
    
     cin>>*B.var>>*B.pav;
     for(int i=0; i<4; i++)
+    int n;
+    n=i;
+
+for (int i = 0; i < n; i++)
+{
+    s[i].rez = new double;
+    int k = *s[i].pazkiek;     //visi pažymiai (ND + egz)
+
+    double suma = 0;
+    for (int j = 0; j < k - 1; j++) //tik ND
+        suma += *s[i].paz[j];
+
+    double vid = suma / (k - 1);
+    int egz = *s[i].paz[k - 1];
+
+    *s[i].rez = 0.4 * vid + 0.6 * egz;
+}
+
+
+for(int i=0; i<n; i++) //rusiavimas medianai
+{
+
+    for(int j=0; j<*s[i].pazkiek-1; j++)
     {
         
         cin>>B.paz[i];
@@ -92,9 +145,12 @@ int main()
                     if(B.rez2[j]<B.rez2[ii]) std::swap(B.rez2[j], B.rez2[ii]);
                 }
             }
+       for(int jj=0; jj<*s[i].pazkiek-1; jj++){ 
+           if(*s[i].paz[j]<*s[i].paz[jj]) std::swap(*s[i].paz[j], *s[i].paz[jj]);
         }
         if(i==3) *C.rez+=0.6*C.paz[i];
     }
+}
 
     cin>>*C.var>>*C.pav;
     for(int i=0; i<4; i++)
@@ -114,7 +170,24 @@ int main()
             }
         }
         if(i==3) *C.rez+=0.6*C.paz[i];
+for (int i = 0; i < n; i++)
+{
+    s[i].rez2 = new double;
+
+    int k = *s[i].pazkiek; //visi pažymiai
+    int nd = k - 1; //ND kiekis
+
+    double med;
+    if (nd % 2 == 1) { //nelyginis ND kiekis
+        med = *s[i].paz[nd / 2];
+    } else { //lyginis ND kiekis
+        med = (*s[i].paz[nd / 2 - 1] + *s[i].paz[nd / 2]) / 2.0;
     }
+
+    int egz = *s[i].paz[k - 1];
+    *s[i].rez2 = 0.4 * med + 0.6 * egz;
+}
+
    cout<<"Pasirinkite, kaip norite, kad butu skaiciuojamas galutinis balas - Vid (0) arba Med (1):"<<std::endl;
    cin>>a;
    if(a==0)
@@ -124,6 +197,9 @@ int main()
    cout<<std::left<<std::setw(15)<<*A.pav<<std::left<<std::setw(15)<<*A.var<<std::fixed<<std::setprecision(2)<<*A.rez<<"\n";
    cout<<std::left<<std::setw(15)<<*B.pav<<std::left<<std::setw(15)<<*B.var<<std::fixed<<std::setprecision(2)<<*B.rez<<"\n";
    cout<<std::left<<std::setw(15)<<*B.pav<<std::left<<std::setw(15)<<*C.var<<std::fixed<<std::setprecision(2)<<*C.rez<<"\n";
+   for(int i=0; i<n; i++){
+   cout<<std::left<<std::setw(15)<<*s[i].pav<<std::left<<std::setw(15)<<*s[i].var<<std::fixed<<std::setprecision(2)<<*s[i].rez<<"\n";
+   }
    cout<<"-----------------------------------------------\n";
    }
    else {
@@ -132,6 +208,10 @@ int main()
    cout<<std::left<<std::setw(15)<<*A.pav<<std::left<<std::setw(15)<<*A.var<<std::fixed<<std::setprecision(2)<<A.rez2[1]*0.4+A.rez2[3]*0.6<<"\n";
    cout<<std::left<<std::setw(15)<<*B.pav<<std::left<<std::setw(15)<<*B.var<<std::fixed<<std::setprecision(2)<<B.rez2[1]*0.4+B.rez2[3]*0.6<<"\n";
    cout<<std::left<<std::setw(15)<<*B.pav<<std::left<<std::setw(15)<<*C.var<<std::fixed<<std::setprecision(2)<<C.rez2[1]*0.4+C.rez2[3]*0.6<<"\n";
+   cout<<"-----------------------------------------------\n"; 
+   for(int i=0; i<100; i++){
+   cout<<std::left<<std::setw(15)<<*s[i].pav<<std::left<<std::setw(15)<<*s[i].var<<std::fixed<<std::setprecision(2)<<*s[i].rez2<<"\n";
+   }
    cout<<"-----------------------------------------------\n";
    }
    
@@ -150,5 +230,16 @@ int main()
     delete[] A.rez2;
     delete[] B.rez2;
     delete[] C.rez2;
+   
+   for(int i=0; i<n; i++)
+{   
+    for(int j=0; j<*s[i].pazkiek; j++) delete s[i].paz[j];
+    delete[] s[i].var;
+    delete[] s[i].pav;
+    delete s[i].rez;
+    delete s[i].rez2;
+}
     return 0;
+
+}
 }
