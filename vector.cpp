@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <iomanip>
+#include <iomanip>
 
 using std::cin;
 using std::string;
@@ -23,6 +25,14 @@ struct studentas
 
 int main() {
     std::vector<studentas> studentai;
+    //meniu
+    int m = 0;
+    while (m != 4) {
+        cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - baigti darba): " << std::endl;
+        cin >> m;
+
+    if (m == 1)
+    {
     while (true) {
         studentas s;
         cout << "Iveskite studento varda (0 - baigti): ";
@@ -54,21 +64,66 @@ int main() {
         suma=0;
         for(int j=0; j<studentai[i].pazymiukiek; j++)
         {
-            if (j != studentai[i].pazymiukiek - 1) suma+=studentai[i].pazymiai[j];
+            if (j != studentai[i].pazymiukiek - 1) suma+=studentai[i].pazymiai[j]; //sumuojame, tik jei j nera egzamino pazymio numeris
         }
         studentai[i].rez=suma/(studentai[i].pazymiukiek-1)*0.4+studentai[i].pazymiai.back()*0.6;
     }
     
-    
-    /* Isvedimas
-    cout << "\nStudentai:\n";
-    for (int i = 0; i < vardai.size(); i++) {
-        cout << vardai[i] << " " << pavardes[i] << " | Pazymiai: ";
-        for (int p : pazymiai[i]) {
-            cout << p << " ";
+    //rusiuojame medianai
+    for(int i=0; i<studentai.size(); i++)
+    {
+        suma=0;
+        for(int j=0; j<studentai[i].pazymiukiek; j++)
+        {
+           for(int jj=0; jj<studentai[i].pazymiukiek; jj++)
+           {
+            if(studentai[i].pazymiai[j]<studentai[i].pazymiai[jj]) std::swap(studentai[i].pazymiai[j], studentai[i].pazymiai[jj]);
+           }
         }
-        cout << endl;
     }
-*/
+    //skaiciuojame mediana ir bendra bala
+        for(int i=0; i<studentai.size(); i++)
+    {
+        int k = studentai[i].pazymiukiek;
+        int nd = k - 1;
+
+        double med;
+        if (nd % 2 == 1) med = studentai[i].pazymiai[nd / 2];
+        else med = (studentai[i].pazymiai[nd / 2 - 1] + studentai[i].pazymiai[nd / 2]) / 2.0;
+        studentai[i].rez2=med*0.4+studentai[i].pazymiai.back()*0.6;
+    }
+    
+    int a;
+    cout << "Pasirinkite, kaip norite, kad butu skaiciuojamas galutinis balas - Vid (0) arba Med (1):" << std::endl;
+            cin >> a;
+            if (a == 0)
+            {
+                cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
+                cout << "-----------------------------------------------\n";
+                for (int i = 0; i < studentai.size(); i++) {
+                    cout << std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<< std::fixed << std::setprecision(2) << studentai[i].rez << "\n";
+                }
+                cout << "-----------------------------------------------\n";
+            }
+            else {
+                cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
+                cout << "-----------------------------------------------\n";
+                for (int i = 0; i < studentai.size(); i++) {
+                    cout << std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<<std::fixed << std::setprecision(2) << studentai[i].rez2 << "\n";
+                }
+                cout << "-----------------------------------------------\n";
+            }
+        }
+        if(m==2)
+        {
+
+        } 
+        if(m==3)
+        {
+
+        }
+        if (m == 4) cout << "Baigiamas darbas.\n";
+    } 
+
     return 0;
 }
