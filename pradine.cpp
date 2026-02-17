@@ -10,7 +10,7 @@ using std::cout;
 
 struct studentas //struktura studentui
 {
-   string *var, *pav; //rpdykles i vardus ir pavardes
+   string *var, *pav; //rodykles i vardus ir pavardes
    int *paz;
    double* rez;
    double* rez2;
@@ -116,7 +116,7 @@ int main()
     }
    cout<<"Pasirinkite, kaip norite, kad butu skaiciuojamas galutinis balas - Vid (0) arba Med (1):"<<std::endl;
    cin>>a;
-   if(a==0)
+   if(a==0) //jei a yra 0 naudos vidurki
    {
    cout<<std::left<<std::setw(15)<<"Pavarde"<<std::left<<std::setw(15)<<"Vardas"<< std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
    cout<<"-----------------------------------------------\n";
@@ -125,7 +125,7 @@ int main()
    cout<<std::left<<std::setw(15)<<*B.pav<<std::left<<std::setw(15)<<*C.var<<std::fixed<<std::setprecision(2)<<*C.rez<<"\n";
    cout<<"-----------------------------------------------\n";
    }
-   else {
+   else { //jei a nera nulis, vadinasi 1, naudos mediana
    cout<<std::left<<std::setw(15)<<"Pavarde"<<std::left<<std::setw(15)<<"Vardas"<< std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
    cout<<"-----------------------------------------------\n";
    cout<<std::left<<std::setw(15)<<*A.pav<<std::left<<std::setw(15)<<*A.var<<std::fixed<<std::setprecision(2)<<A.rez2[1]*0.4+A.rez2[3]*0.6<<"\n";
@@ -153,4 +153,5 @@ int main()
     return 0;
 
 }
+
 
