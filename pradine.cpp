@@ -8,11 +8,10 @@ using std::cin;
 using std::string;
 using std::cout;
 
-struct studentas
+struct studentas //struktura studentui
 {
-   string *var, *pav;
+   string *var, *pav; //rpdykles i vardus ir pavardes
    int *paz;
-   //std::vector<int>paz; jei naudociau vector
    double* rez;
    double* rez2;
 };
@@ -20,7 +19,7 @@ struct studentas
 int main()
 {
     int a;
-    studentas A;
+    studentas A; 
     studentas B;
     studentas C;
 
@@ -55,7 +54,7 @@ int main()
     
     cout<<"Iveskite studentu vardus ir pavardes bei 4 gautus pazymius (pirmi 3 n.d, 4-tas egzaminas):"<<std::endl;
     cin>>*A.var>>*A.pav;
-    for(int i=0; i<4; i++)
+    for(int i=0; i<4; i++) 
     {
       
         cin>>A.paz[i];
@@ -154,3 +153,4 @@ int main()
     return 0;
 
 }
+
