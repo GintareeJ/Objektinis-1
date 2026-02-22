@@ -27,6 +27,7 @@ struct studentas
 
 int main() {
     std::string CVfd="kursiokai.txt";
+    std::string CVfr="rezultatas.txt";
     std::ifstream fd(CVfd);
     std::vector<studentas> studentai;
     srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
@@ -293,7 +294,10 @@ int main() {
                 }  
                 studentai.push_back(s);
             }
-
+            int spausd;
+            cout<<"Pasirinkite, kur norite, kad butu spausdinami duomenys (0 - faile, 1 - ekrane): "<<std::endl;
+            cin>>spausd;
+            if(spausd==1){
             for(int i=0; i<studentai.size(); i++)
             {
                 cout<<std::left<<std::setw(15)<<studentai[i].vardas<<std::left<<std::setw(15)<<studentai[i].pavarde<<std::left<<std::setw(5);
@@ -303,6 +307,20 @@ int main() {
                 } 
                 cout<<std::endl;
             }
+        }
+            if(spausd==0){
+            std::ofstream fr(CVfr); 
+            for(int i=0; i<studentai.size(); i++)
+            {
+                fr<<std::left<<std::setw(15)<<studentai[i].vardas<<std::left<<std::setw(15)<<studentai[i].pavarde<<std::left<<std::setw(5);
+                for(int j=0; j<studentai[i].pazymiai.size(); j++)
+                {
+                    fr<<studentai[i].pazymiai[j]<<std::left<<std::setw(5);
+                } 
+                fr<<std::endl;
+            }
+            fr.close();
+        }
         }
     } 
 
