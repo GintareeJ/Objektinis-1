@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <iomanip>
 #include <algorithm>
+#include <fstream>
+#include <string>
 
 using std::cin;
 using std::string;
@@ -24,6 +26,8 @@ struct studentas
 };
 
 int main() {
+    std::string CVfd="kursiokai.txt";
+    std::ifstream fd(CVfd);
     std::vector<studentas> studentai;
     srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
     string pavardes[] = { "Kazlauskas", "Petrauskas", "Jankauskas", "Vaitkus",
@@ -37,7 +41,7 @@ int main() {
     //meniu
     int m = 0;
     while (m != 4) {
-        cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - baigti darba): " << std::endl;
+        cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - baigti darba, 5 - nuskaityti duomenis is failo): " << std::endl;
         cin >> m;
 
     if (m == 1)
@@ -52,7 +56,7 @@ int main() {
 
         cout << "Iveskite pavarde: ";
         cin >> s.pavarde;
-        cout << "Iveskite pazymius (0 - baigti), paskutinis egzaminas: ";
+        cout << "Iveskite pazymius (0 - baigti), paskutinis egzaminas (min 2): ";
         int p; //pazymiams
         while(true)
         {
@@ -127,7 +131,7 @@ int main() {
 
         cout << "Iveskite pavarde: ";
         cin >> s.pavarde;
-        cout << "Pazymiai bus generuojami automatiskai, iveskite pazymiu kieki: ";
+        cout << "Pazymiai bus generuojami automatiskai, iveskite pazymiu kieki (min 2): ";
         int kiek=0; //pazymiu kiekis
         int p; //pazymiams
         cin>>kiek;
@@ -198,7 +202,7 @@ int main() {
         int skiek; //studentu kiekis
         cout << "Sudentu vardai ir pavardes bus generuojami automatiskai, iveskite studentu kieki: ";
         cin >> skiek;
-        cout << "Pazymiai bus generuojami automatiskai, iveskite pazymiu kieki: ";
+        cout << "Pazymiai bus generuojami automatiskai, iveskite pazymiu kieki (min 2): ";
         int kiek; //pazymiu kiekis
         cin>>kiek;
         for(int i=0; i<skiek; i++)
@@ -271,6 +275,35 @@ int main() {
             studentai.clear();
         }
         if (m == 4) cout << "Baigiamas darbas.\n";
+        if(m==5)
+        {
+            studentas s;
+            studentai.clear();
+            std::string eilute;
+            std::getline(fd, eilute); //praleidžia pirma eilute
+            cout<<eilute<<"\n";
+            int p; //pazymiai + egzaminas (paskutinis)
+            while(fd>>s.vardas>>s.pavarde)
+            {
+               s.pazymiai.clear();
+               s.pazymiai.reserve(6); 
+               while(fd>>p) 
+                {
+                    s.pazymiai.push_back(p);
+                }  
+                studentai.push_back(s);
+            }
+
+            for(int i=0; i<studentai.size(); i++)
+            {
+                cout<<std::left<<std::setw(15)<<studentai[i].vardas<<std::left<<std::setw(15)<<studentai[i].pavarde<<std::left<<std::setw(5);
+                for(int j=0; j<studentai[i].pazymiai.size(); j++)
+                {
+                    cout<<studentai[i].pazymiai[j]<<std::left<<std::setw(5);
+                } 
+                cout<<std::endl;
+            }
+        }
     } 
 
     return 0;
