@@ -27,8 +27,8 @@ struct studentas
 };
 
 int main() {
-    std::string CVfd="kursiokai.txt";
-    std::string CVfd;
+    std::string CVfd="studentai10000.txt";
+   // std::string CVfd;
 /*
 cout << "Pasirinkite faila:\n";
 cout << "1 - studentai1000.txt\n";
@@ -59,7 +59,7 @@ else if (pasirinkimas == 3)
     //meniu
     int m = 0;
     while (m != 4) {
-        cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - baigti darba, 5 - nuskaityti duomenis is failo): " << std::endl;
+        cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - nuskaityti duomenis is failo,  5 - baigti darba): " << std::endl;
         cin >> m;
 
     if (m == 1)
@@ -292,8 +292,8 @@ else if (pasirinkimas == 3)
             }
             studentai.clear();
         }
-        if (m == 4) cout << "Baigiamas darbas.\n";
-        if(m==5)
+        if (m == 5) cout << "Baigiamas darbas.\n";
+        if(m==4)
         {
             studentas s;
             studentai.clear();
