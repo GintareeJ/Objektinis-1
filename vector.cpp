@@ -26,24 +26,43 @@ struct studentas
    double rez2; //rezultatui su mediana saugoti
 };
 
+bool DidPav(studentas &A, studentas &B)
+{
+    return A.pavarde<B.pavarde;
+}
+
+bool DidVar(studentas &A, studentas &B)
+{
+    return A.vardas<B.vardas;
+}
+
+bool DidVid(studentas &A, studentas &B)
+{
+    return A.rez<B.rez;
+}
+
+bool DidMed(studentas &A, studentas &B)
+{
+    return A.rez2<B.rez2;
+}
+
 int main() {
-    std::string CVfd="studentai10000.txt";
-   // std::string CVfd;
-/*
+   std::string CVfd;
+
 cout << "Pasirinkite faila:\n";
-cout << "1 - studentai1000.txt\n";
-cout << "2 - studentai10000.txt\n";
-cout << "3 - studentai100000.txt\n";
+cout << "1 - studentai10000.txt\n";
+cout << "2 - studentai100000.txt\n";
+cout << "3 - studentai1000000.txt\n";
 
 int pasirinkimas;
 cin>>pasirinkimas;
 if (pasirinkimas==1)
-    CVfd = "studentai1000.txt";
+    CVfd = "studentai.txt";
 else if (pasirinkimas == 2)
-    CVfd = "studentai10000.txt";
-else if (pasirinkimas == 3)
     CVfd = "studentai100000.txt";
-    */
+else if (pasirinkimas == 3)
+    CVfd = "studentai1000000.txt";
+
     std::string CVfr="rezultatas.txt";
     std::ifstream fd(CVfd);
     std::vector<studentas> studentai;
@@ -347,6 +366,7 @@ else if (pasirinkimas == 3)
     
     int a;
     int spausd;
+    int rus; //rusiavimui
             cout<<"Pasirinkite, kur norite, kad butu spausdinami duomenys (0 - faile, 1 - ekrane): "<<std::endl;
             cin>>spausd;
             if(spausd==1){
@@ -354,6 +374,11 @@ else if (pasirinkimas == 3)
             cin >> a;
             if (a == 0)
             {
+                cout<<"Pasirinkite, pagal ka norite, jog butu suriuosatas studentu sarasas: 0 - vardas, 1 - pavarde, 2 - galutinis rez. (vid.)\n";
+                cin>>rus;
+                if(rus==0) sort(studentai.begin(), studentai.end(), DidVar);
+                if(rus==1) sort(studentai.begin(), studentai.end(), DidPav);
+                if(rus==2) sort(studentai.begin(), studentai.end(), DidVid);
                 cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
                 cout << "-----------------------------------------------\n";
                 for (int i = 0; i < studentai.size(); i++) {
@@ -362,6 +387,11 @@ else if (pasirinkimas == 3)
                 cout << "-----------------------------------------------\n";
             }
             else {
+                cout<<"Pasirinkite, pagal ka norite, jog butu suriuosatas studentu sarasas: 0 - vardas, 1 - pavarde, 2 - galutinis rez. (med.)\n";
+                cin>>rus;
+                if(rus==0) sort(studentai.begin(), studentai.end(), DidVar);
+                if(rus==1) sort(studentai.begin(), studentai.end(), DidPav);
+                if(rus==2) sort(studentai.begin(), studentai.end(), DidMed);
                 cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
                 cout << "-----------------------------------------------\n";
                 for (int i = 0; i < studentai.size(); i++) {
@@ -377,6 +407,11 @@ else if (pasirinkimas == 3)
             cin>>a;
             if (a == 0)
             {
+                cout<<"Pasirinkite, pagal ka norite, jog butu suriuosatas studentu sarasas: 0 - vardas, 1 - pavarde, 2 - galutinis rez. (vid.)\n";
+                cin>>rus;
+                if(rus==0) sort(studentai.begin(), studentai.end(), DidVar);
+                if(rus==1) sort(studentai.begin(), studentai.end(), DidPav);
+                if(rus==2) sort(studentai.begin(), studentai.end(), DidVid);
                 fr<< std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
                 fr<< "-----------------------------------------------\n";
                 for (int i = 0; i < studentai.size(); i++) {
@@ -385,6 +420,11 @@ else if (pasirinkimas == 3)
                 fr<< "-----------------------------------------------\n";
             }
             else {
+                cout<<"Pasirinkite, pagal ka norite, jog butu suriuosatas studentu sarasas: 0 - vardas, 1 - pavarde, 2 - galutinis rez. (vid.)\n";
+                cin>>rus;
+                if(rus==0) sort(studentai.begin(), studentai.end(), DidVar);
+                if(rus==1) sort(studentai.begin(), studentai.end(), DidPav);
+                if(rus==2) sort(studentai.begin(), studentai.end(), DidVid);
                 fr<< std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
                 fr<< "-----------------------------------------------\n";
                 for (int i = 0; i < studentai.size(); i++) {
