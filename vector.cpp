@@ -313,16 +313,14 @@ else if (pasirinkimas == 3)
         if (m == 5) cout << "Baigiamas darbas.\n";
         if(m==4)
         {
-            studentas s;
             studentai.clear();
             std::string eilute;
             std::getline(fd, eilute); //praleidžia pirma eilute
-            int p; //pazymiai + egzaminas (paskutinis)
         while (std::getline(fd, eilute))
        {
         std::stringstream st(eilute);
         studentas s;
-        int p;
+        int p; //pazymiai + egzaminas (paskutinis)
         st>>s.vardas>>s.pavarde;
         s.pazymiai.clear();
 
@@ -439,4 +437,5 @@ else if (pasirinkimas == 3)
 
     return 0;
 }
+
 
