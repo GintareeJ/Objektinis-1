@@ -1,7 +1,0 @@
-Vardas        Pavarde       ND1  ND2  ND3  ND4  ND5  Egzaminas
-Jonas         Vaitkus       8    9    8    7    10   10
-Petras        Jankauskas    9    9    10   10   9    8
-Mantas        Kazlauskas    5    6    7    6    7    5
-Laura         Vaitkute      6    7    6    7    6    7
-Monika        Kazlauskaite  6    7    6    7    6    7
-Aiste         Petrauskaite  5    10   8    9    8    10
