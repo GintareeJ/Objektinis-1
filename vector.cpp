@@ -117,6 +117,7 @@ else if (pasirinkimas == 3)
 
     //meniu
     int m = 0;
+
     while (m != 5) {
         cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - nuskaityti duomenis is failo,  5 - baigti darba): " << std::endl;
         cin >> m;
@@ -374,7 +375,7 @@ else if (pasirinkimas == 3)
           studentai.push_back(s);
          }
         auto end2 = high_resolution_clock::now(); 
-        suma2=duration<double>(end2 - start2).count(); //laikas duomenu nuskaitymui
+        suma2+=duration<double>(end2 - start2).count(); //laikas duomenu nuskaitymui
          double suma; //rezultatui skaiciuoti
     for(int i=0; i<studentai.size(); i++)
     {
@@ -441,16 +442,19 @@ else if (pasirinkimas == 3)
                 }
 
                 auto end3 = high_resolution_clock::now(); //rusiavimo laikas
-                suma3=duration<double>(end3-start3).count();
+                suma3+=duration<double>(end3-start3).count();
                 auto start5 = high_resolution_clock::now(); 
+                   for(int i=0; i<testai; i++)
+                {
                 cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
                 cout << "-----------------------------------------------\n";
                 for (int i = 0; i < studentai.size(); i++) {
                     cout << std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<< std::fixed << std::setprecision(2) << studentai[i].rez << "\n";
                 }
                 cout << "-----------------------------------------------\n";
+            }
                 auto end5 = high_resolution_clock::now(); 
-                suma5=duration<double>(end5-start5).count();
+                suma5+=duration<double>(end5-start5).count();
             }
             else {
                 cout<<"Pasirinkite, pagal ka norite, jog butu suriuosatas studentu sarasas: 0 - vardas, 1 - pavarde, 2 - galutinis rez. (med.)"<<std::endl;
@@ -478,17 +482,20 @@ else if (pasirinkimas == 3)
                     if(r==1) sort(studentai.begin(), studentai.end(), MazMed);
                 }
                 auto end3 = high_resolution_clock::now(); 
-                suma3=duration<double>(end3-start3).count();
+                suma3+=duration<double>(end3-start3).count();
 
                 auto start5 = high_resolution_clock::now(); 
+                   for(int i=0; i<testai; i++)
+{
                 cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
                 cout << "-----------------------------------------------\n";
                 for (int i = 0; i < studentai.size(); i++) {
                     cout << std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<<std::fixed << std::setprecision(2) << studentai[i].rez2 << "\n";
                 }
                 cout << "-----------------------------------------------\n";
+            }
                 auto end5 = high_resolution_clock::now(); 
-                suma5=duration<double>(end5-start5).count();
+                suma5+=duration<double>(end5-start5).count();
             }
             studentai.clear();
         }
@@ -523,17 +530,20 @@ else if (pasirinkimas == 3)
                     if(r==1) sort(studentai.begin(), studentai.end(), MazMed);
                 }
                 auto end4 = high_resolution_clock::now(); 
-                suma4=duration<double>(end4-start4).count();
+                suma4+=duration<double>(end4-start4).count();
 
                 auto start6 = high_resolution_clock::now(); 
+                   for(int i=0; i<testai; i++)
+{
                 fr<< std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
                 fr<< "-----------------------------------------------\n";
                 for (int i = 0; i < studentai.size(); i++) {
                     fr<< std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<< std::fixed << std::setprecision(2) << studentai[i].rez << "\n";
                 }
                 fr<< "-----------------------------------------------\n";
+            }
                 auto end6 = high_resolution_clock::now(); 
-                suma6=duration<double>(end6-start6).count();
+                suma6+=duration<double>(end6-start6).count();
             }
             else {
                 cout<<"Pasirinkite, pagal ka norite, jog butu suriuosatas studentu sarasas: 0 - vardas, 1 - pavarde, 2 - galutinis rez. (vid.)"<<std::endl;
@@ -561,36 +571,38 @@ else if (pasirinkimas == 3)
                     if(r==1) sort(studentai.begin(), studentai.end(), MazMed);
                 }
                 auto end4 = high_resolution_clock::now(); 
-                suma4=duration<double>(end4-start4).count();
+                suma4+=duration<double>(end4-start4).count();
 
                 auto start6 = high_resolution_clock::now(); 
+                   for(int i=0; i<testai; i++)
+{
                 fr<< std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
                 fr<< "-----------------------------------------------\n";
                 for (int i = 0; i < studentai.size(); i++) {
                     fr<< std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<<std::fixed << std::setprecision(2) << studentai[i].rez2 << "\n";
                 }
                 fr<< "-----------------------------------------------\n";
+            }
                 auto end6 = high_resolution_clock::now(); 
-                suma6=duration<double>(end6-start6).count();
+                suma6+=duration<double>(end6-start6).count();
+            }
             }
             studentai.clear();
-        }
-        }
     } 
     auto end1 = high_resolution_clock::now();
-    suma1 += duration<double>(end1 - start1).count();
-
+    suma1 += duration<double>(end1 - start1).count();   
+}
 cout<<"Programos vykdymo laikas: "<<suma1<<"s"<<std::endl;
 cout<<"Programos duomenu nuskaitymo is failo laikas: "<<suma2<<"s"<<std::endl;
 if(spausd==1)
 {
    cout<<"Programos duomenu rusiavimo laikas: "<<suma3<<"s"<<std::endl;
-   cout<<"Programos duomenu spausdinimo laikas: "<<suma5<<"s"<<std::endl;
+   cout<<"Programos duomenu spausdinimo laiku vidurkis: "<<suma5/testai<<"s"<<std::endl;
 }
 if(spausd==0)
 {
    cout<<"Programos duomenu rusiavimo laikas: "<<suma4<<"s"<<std::endl;
-   cout<<"Programos duomenu spausdinimo faile laikas: "<<suma6<<"s"<<std::endl;
+   cout<<"Programos duomenu spausdinimo faile laiku vidurkis: "<<suma6/testai<<"s"<<std::endl;
 }
   return 0;
 }
