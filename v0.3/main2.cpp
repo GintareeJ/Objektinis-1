@@ -32,6 +32,7 @@ double suma4=0; //duomenu rusiavimui faile
 double suma5=0; //duomenu spausdinimui ekrane
 double suma6=0; //duomenu spausdinimui faile
 int spausd;
+bool skaitytaIsFailo = false;
 
 std::string CVfd;
 std::string CVfr="rezultatas.txt";
@@ -51,11 +52,55 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
     int m = 0;
     while (m != 5) {
         cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - nuskaityti duomenis is failo,  5 - baigti darba): " << std::endl;
+        while(true){
+        try{
         cin >> m;
+        if(std::cin.fail()) 
+           throw std::invalid_argument("Ivesta reiksme nera skaicius");
+        if (m<1||m>5) 
+            throw std::out_of_range("Tokio pasirinkimo nera");
 
-        if (m == 1) PirmasP(studentai);
-        if(m==2) AntrasP(studentai);
-        if(m==3) TreciasP(studentai, pavardesVec, vardaiVec);
+        break;
+        }
+        catch (const std::exception& e) {
+        cout << "Klaida: " << e.what() << std::endl;
+        cin.clear();
+        cin.ignore(10000, '\n'); //pasirenkamas didelis skaicius, kad tikrai butu isvalyta ivedimo reiksme
+    }
+        }
+        if(m==1) 
+        {
+        try
+        {
+            PirmasP(studentai);
+        }
+         catch (const std::exception& e)
+            {
+                cout<< "Klaida: "<<e.what()<<std::endl;
+            }
+        }
+        if(m==2) 
+        {
+        try
+        {
+            AntrasP(studentai);
+        }
+         catch (const std::exception& e)
+            {
+                cout<< "Klaida: "<<e.what()<<std::endl;
+            }
+        }
+        if(m==3) 
+        {
+            try
+            {
+                {TreciasP(studentai, pavardesVec, vardaiVec);}
+            }
+            catch(const std::exception& e)
+            {
+                std::cout<<"Klaida: "<< e.what() <<std::endl;
+            }
+        }
         if(m==4) 
         {
     cout << "Pasirinkite faila:\n";
@@ -83,7 +128,14 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
         CVfd = "studentai1000000.txt";
         studentai.reserve(1000000);
     }   
-            KetvirtasP(studentai, CVfd, CVfr, suma2, suma3, suma4, suma5, suma6, spausd);
+     try
+    {
+        KetvirtasP(studentai, CVfd, CVfr, suma2, suma3, suma4, suma5, suma6, spausd, skaitytaIsFailo);
+    }
+    catch (const std::exception& e)
+    {
+        cout<< "Klaida: "<<e.what()<<std::endl;
+    }
         }
         if (m == 5) cout << "Baigiamas darbas.\n";
     } 
@@ -91,6 +143,7 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
     suma1 += duration<double>(end1 - start1).count();
 
 cout<<"Programos vykdymo laikas: "<<suma1<<"s"<<std::endl;
+if(skaitytaIsFailo){
 cout<<"Programos duomenu nuskaitymo is failo laikas: "<<suma2<<"s"<<std::endl;
 if(spausd==1)
 {
@@ -101,6 +154,7 @@ if(spausd==0)
 {
    cout<<"Programos duomenu rusiavimo laikas: "<<suma4<<"s"<<std::endl;
    cout<<"Programos duomenu spausdinimo faile laikas: "<<suma6<<"s"<<std::endl;
+}
 }
   return 0;
 }
