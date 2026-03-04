@@ -234,7 +234,7 @@ while (true)
 
     if (p < 1 || p > 10) {
         cout << "Pazymys turi buti tarp 1 ir 10, veskite dar karta: \n";
-        cin.ignore(10000, '\n'); //kad jei visi skaiciai daugiau uz 10, klaida rasyti viena karta
+        cin.ignore(10000, '\n'); //kad jei visi skaiciai daugiau uz 10, klaida rasyti viena
         continue;
     }
     s.pazymiai.push_back(p);
@@ -303,34 +303,36 @@ void TreciasP(std::vector<studentas>& studentai, const std::vector<std::string>&
 void KetvirtasP(std::vector<studentas>& studentai, const std::string& CVfd, const std::string& CVfr, double& suma2, double& suma3, double& suma4, double& suma5, double& suma6, int& spausd, bool& skaitytaIsFailo, int &b) //jei pasirinkitas 4
 {
     skaitytaIsFailo=true;
-    std::ifstream fd(CVfd);
-     if (!fd.is_open()) 
-     {
-        std::cerr << "Nepavyko atidaryti failo\n";
-        std::terminate();
-     }
+    try {
+        std::ifstream fd(CVfd);
+        if (!fd.is_open()) {
+            throw std::runtime_error("Nepavyko atidaryti failo. ");
+        }
+
         studentai.clear();
         std::string eilute;
-        auto start2 = high_resolution_clock::now(); 
-            std::getline(fd, eilute); //praleidžia pirma eilute
-        while (std::getline(fd, eilute))
-       {
-        std::stringstream st(eilute);
-        studentas s;
-        int p;//pazymiai + egzaminas (paskutinis)
-        st>>s.vardas>>s.pavarde;
-        s.pazymiai.clear();
 
-           while(st>>p)
-           {
-                  s.pazymiai.push_back(p);
-           }
+        auto start2 = high_resolution_clock::now();
+        std::getline(fd, eilute);
 
-          studentai.push_back(s);
-         }
-        auto end2 = high_resolution_clock::now(); 
-        suma2=duration<double>(end2 - start2).count(); //laikas duomenu nuskaitymui
-        Skaiciavimai(studentai);
+        while (std::getline(fd, eilute)) {
+            std::stringstream st(eilute);
+            studentas s;
+            int p;
+            st >> s.vardas >> s.pavarde;
+            s.pazymiai.clear();
+            while (st >> p) s.pazymiai.push_back(p);
+            studentai.push_back(s);
+        }
+
+        auto end2 = high_resolution_clock::now();
+        suma2 = duration<double>(end2 - start2).count();
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Klaida: " << e.what() << "\n";
+        return; 
+    }
+    Skaiciavimai(studentai);
     int r; //kintamasis rusiavimui (mazejanciai arba didejanciai)
     int rus; //rusiavimo tipui pasirinkti (vardas, pavarde ir t.t)
             while (true) { 
