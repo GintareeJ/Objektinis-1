@@ -234,6 +234,7 @@ while (true)
 
     if (p < 1 || p > 10) {
         cout << "Pazymys turi buti tarp 1 ir 10, veskite dar karta: \n";
+        cin.ignore(10000, '\n'); //kad jei visi skaiciai daugiau uz 10, klaida rasyti viena karta
         continue;
     }
     s.pazymiai.push_back(p);
