@@ -32,6 +32,7 @@ double suma4=0; //duomenu rusiavimui faile
 double suma5=0; //duomenu spausdinimui ekrane
 double suma6=0; //duomenu spausdinimui faile
 int spausd;
+int b;
 bool skaitytaIsFailo = false;
 
 std::string CVfd;
@@ -72,7 +73,7 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
         {
         try
         {
-            PirmasP(studentai);
+            PirmasP(studentai, b);
         }
          catch (const std::exception& e)
             {
@@ -83,7 +84,7 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
         {
         try
         {
-            AntrasP(studentai);
+            AntrasP(studentai, b);
         }
          catch (const std::exception& e)
             {
@@ -94,7 +95,7 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
         {
             try
             {
-                {TreciasP(studentai, pavardesVec, vardaiVec);}
+                {TreciasP(studentai, pavardesVec, vardaiVec, b);}
             }
             catch(const std::exception& e)
             {
@@ -147,7 +148,7 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
     }   
      try
     {
-        KetvirtasP(studentai, CVfd, CVfr, suma2, suma3, suma4, suma5, suma6, spausd, skaitytaIsFailo);
+        KetvirtasP(studentai, CVfd, CVfr, suma2, suma3, suma4, suma5, suma6, spausd, skaitytaIsFailo, b);
     }
     catch (const std::exception& e)
     {
