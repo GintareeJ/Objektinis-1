@@ -352,153 +352,55 @@ void KetvirtasP(std::vector<studentas>& studentai, const std::string& CVfd, cons
 
             break;
         }
-            if(spausd==1){
-            b=kinta();
-            if (b == 0)
-            {
-                rus=kintrus(rus);
-                auto start3 = high_resolution_clock::now(); 
-                if(rus==0) 
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidVar);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazVar);
-                }
-                if(rus==1) 
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidPav);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazPav);
-                }
-                if(rus==2) 
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidVid);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazVid);
-                }
 
-                auto end3 = high_resolution_clock::now(); //rusiavimo laikas
-                suma3=duration<double>(end3-start3).count();
-                auto start5 = high_resolution_clock::now(); 
-                cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
-                cout << "-----------------------------------------------\n";
-                for (int i = 0; i < studentai.size(); i++) {
-                    cout << std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<< std::fixed << std::setprecision(2) << studentai[i].rez << "\n";
-                }
-                cout << "-----------------------------------------------\n";
-                auto end5 = high_resolution_clock::now(); 
-                suma5=duration<double>(end5-start5).count();
-            }
-            else {
-                rus=kintrus(rus);
-                auto start3 = high_resolution_clock::now(); 
-                if(rus==0) 
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidVar);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazVar);
-                }
-                if(rus==1) 
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidPav);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazPav);
-                }
-                if(rus==2) 
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidMed);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazMed);
-                }
-                auto end3 = high_resolution_clock::now(); 
-                suma3=duration<double>(end3-start3).count();
+    b = kinta();
+    rus = kintrus(rus);
+    r = kintr(r);
 
-                auto start5 = high_resolution_clock::now(); 
-                cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
-                cout << "-----------------------------------------------\n";
-                for (int i = 0; i < studentai.size(); i++) {
-                    cout << std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<<std::fixed << std::setprecision(2) << studentai[i].rez2 << "\n";
-                }
-                cout << "-----------------------------------------------\n";
-                auto end5 = high_resolution_clock::now(); 
-                suma5=duration<double>(end5-start5).count();
+    if (spausd == 1)
+    {
+        auto start3 = high_resolution_clock::now();
+        RusiuotiStudentus(studentai, b, r, rus);
+        auto end3 = high_resolution_clock::now();
+        suma3 = duration<double>(end3 - start3).count();
+
+        auto start5 = high_resolution_clock::now();
+        //spausdinimas i ekrana
+        if (b == 0)
+        {
+            cout << std::left << std::setw(15) << "Pavarde"<< std::left << std::setw(15) << "Vardas"<< std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
+            cout << "-----------------------------------------------\n";
+            for (int i = 0; i < studentai.size(); i++) {
+                cout << std::left << std::setw(15) << studentai[i].pavarde<< std::left << std::setw(15) << studentai[i].vardas<< std::fixed << std::setprecision(2) << studentai[i].rez << "\n";
             }
-            studentai.clear();
+            cout << "-----------------------------------------------\n";
         }
-            if(spausd==0){
-            std::ofstream fr(CVfr); 
-            b=kinta();
-            if (b == 0)
-            {
-                rus=kintrus(rus);
-                auto start4 = high_resolution_clock::now(); 
-                if(rus==0)
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidVar);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazVar);
-                }
-                if(rus==1)
-                {  
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidPav);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazPav);
-                }
-                if(rus==2) 
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidVid);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazVid);
-                }
-                auto end4 = high_resolution_clock::now(); 
-                suma4=duration<double>(end4-start4).count();
-
-                auto start6 = high_resolution_clock::now(); 
-                fr<< std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
-                fr<< "-----------------------------------------------\n";
-                for (int i = 0; i < studentai.size(); i++) {
-                    fr<< std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<< std::fixed << std::setprecision(2) << studentai[i].rez << "\n";
-                }
-                fr<< "-----------------------------------------------\n";
-                auto end6 = high_resolution_clock::now(); 
-                suma6=duration<double>(end6-start6).count();
+        else
+        {
+            cout << std::left << std::setw(15) << "Pavarde"<< std::left << std::setw(15) << "Vardas"<< std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
+            cout << "-----------------------------------------------\n";
+            for (int i = 0; i < studentai.size(); i++) {
+                cout << std::left << std::setw(15) << studentai[i].pavarde<< std::left << std::setw(15) << studentai[i].vardas<< std::fixed << std::setprecision(2) << studentai[i].rez2 << "\n";
             }
-    else {
-                rus=kintrus(rus);
-                auto start4 = high_resolution_clock::now(); 
-                if(rus==0)
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidVar);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazVar);
-                }
-                if(rus==1)
-                {   
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidPav);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazPav);
-                }
-                if(rus==2) 
-                {
-                    r=kintr(r);
-                    if(r==0) sort(studentai.begin(), studentai.end(), DidMed);
-                    if(r==1) sort(studentai.begin(), studentai.end(), MazMed);
-                }
-                auto end4 = high_resolution_clock::now(); 
-                suma4=duration<double>(end4-start4).count();
-
-                auto start6 = high_resolution_clock::now(); 
-                fr<< std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
-                fr<< "-----------------------------------------------\n";
-                for (int i = 0; i < studentai.size(); i++) {
-                    fr<< std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<<std::fixed << std::setprecision(2) << studentai[i].rez2 << "\n";
-                }
-                fr<< "-----------------------------------------------\n";
-                auto end6 = high_resolution_clock::now(); 
-                suma6=duration<double>(end6-start6).count();
-            }
-            studentai.clear();
+            cout << "-----------------------------------------------\n";
         }
+        auto end5 = high_resolution_clock::now();
+        suma5 = duration<double>(end5 - start5).count();
+    }
+    else
+    {
+        auto start4 = high_resolution_clock::now();
+        RusiuotiStudentus(studentai, b, r, rus);
+        auto end4 = high_resolution_clock::now();
+        suma4 = duration<double>(end4 - start4).count();
+
+        auto start6 = high_resolution_clock::now();
+        SpausdintiIFaila(CVfr, studentai, b);
+        auto end6 = high_resolution_clock::now();
+        suma6 = duration<double>(end6 - start6).count();
+    }
+
+    studentai.clear();
 }
 
 void GeneruotiStudentuFaila(const std::string& failoPav, int studentuKiekis, int ndKiekis)
@@ -637,6 +539,17 @@ void SpausdintiIFaila(const std::string& failoPav, const Konteineris& studentai,
 
     fr.close();
 }
+void ApdorojamasFailas(const std::string& pradinisFailas, const std::string& vargFailas, const std::string& kietFailas, std::vector<studentas> studentai, std::vector<studentas> vargsiukai, std::vector<studentas> kietiakai, int ndKiekis, int studentuKiekis, int r, int rus, int b)
+{
+    GeneruotiStudentuFaila(pradinisFailas, studentuKiekis, ndKiekis);
+    NuskaitytiIsFailo(studentai, pradinisFailas);
+    Skaiciavimai(studentai);
+    RusiuotiStudentus(studentai, b, r, rus);
+    PadalintiStudentus(studentai, vargsiukai, kietiakai, b);
+    SpausdintiIFaila(vargFailas, vargsiukai, b);
+    SpausdintiIFaila(kietFailas, kietiakai, b);
+}
+
 void PenktasP(std::vector<studentas>& studentai, std::vector<studentas>& vargsiukai, std::vector<studentas>& kietiakai)
 {
     int b;
@@ -645,47 +558,10 @@ void PenktasP(std::vector<studentas>& studentai, std::vector<studentas>& vargsiu
     rus = kintrus(rus);
     r = kintr(r);
     b=kinta();//spausdinimo pasirinkimas;
-    
     int ndKiekis = 5; //pasirinktas bet koks nd kiekis
-    GeneruotiStudentuFaila("studentai1000.txt", 1000, ndKiekis);
-    NuskaitytiIsFailo(studentai, "studentai1000.txt");
-    Skaiciavimai(studentai);
-    RusiuotiStudentus(studentai, b, r, rus);
-    PadalintiStudentus(studentai, vargsiukai, kietiakai, b);
-    SpausdintiIFaila("Vargsiukai1000.txt", vargsiukai, b);
-    SpausdintiIFaila("Kietiakai1000.txt", kietiakai, b);
-
-    GeneruotiStudentuFaila("studentai10000.txt", 10000, ndKiekis);
-    NuskaitytiIsFailo(studentai, "studentai10000.txt");
-    Skaiciavimai(studentai);
-    RusiuotiStudentus(studentai, b, r, rus);
-    PadalintiStudentus(studentai, vargsiukai, kietiakai, b);
-    SpausdintiIFaila("Vargsiukai10000.txt", vargsiukai, b);
-    SpausdintiIFaila("Kietiakai10000.txt", kietiakai, b);
-
-    GeneruotiStudentuFaila("studentai100000.txt", 100000, ndKiekis);
-    NuskaitytiIsFailo(studentai, "studentai100000.txt");
-    Skaiciavimai(studentai);
-    RusiuotiStudentus(studentai, b, r, rus);
-    PadalintiStudentus(studentai, vargsiukai, kietiakai, b);
-    SpausdintiIFaila("Vargsiukai100000.txt", vargsiukai, b);
-    SpausdintiIFaila("Kietiakai100000.txt", kietiakai, b);
-
-    GeneruotiStudentuFaila("studentai1000000.txt", 1000000, ndKiekis);
-    NuskaitytiIsFailo(studentai, "studentai1000000.txt");
-    Skaiciavimai(studentai);
-    RusiuotiStudentus(studentai, b, r, rus);
-    PadalintiStudentus(studentai, vargsiukai, kietiakai, b);
-    SpausdintiIFaila("Vargsiukai1000000.txt", vargsiukai, b);
-    SpausdintiIFaila("Kietiakai1000000.txt", kietiakai, b);
-
-    GeneruotiStudentuFaila("studentai10000000.txt", 10000000, ndKiekis);
-    NuskaitytiIsFailo(studentai, "studentai10000000.txt");
-    Skaiciavimai(studentai);
-    RusiuotiStudentus(studentai, b, r, rus);
-    PadalintiStudentus(studentai, vargsiukai, kietiakai, b);
-    SpausdintiIFaila("Vargsiukai10000000.txt", vargsiukai, b);
-    SpausdintiIFaila("Kietiakai10000000.txt", kietiakai, b);    
-
-
+    ApdorojamasFailas("studentai1000.txt", "vargsiukai1000.txt", "kietiakai1000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 1000, r, rus, b);
+    ApdorojamasFailas("studentai10000.txt", "vargsiukai10000.txt", "kietiakai10000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 10000, r, rus, b);
+    ApdorojamasFailas("studentai100000.txt", "vargsiukai100000.txt", "kietiakai100000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 100000, r, rus, b);
+    ApdorojamasFailas("studentai1000000.txt", "vargsiukai1000000.txt", "kietiakai1000000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 1000000, r, rus, b);
+    ApdorojamasFailas("studentai10000000.txt", "vargsiukai10000000.txt", "kietiakai10000000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 10000000, r, rus, b);
 }
