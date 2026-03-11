@@ -13,9 +13,10 @@
 using namespace std;
 using namespace std::chrono;
 
-void Skaiciavimai(std::vector<studentas>& studentai)
+void Skaiciavimai(std::vector<studentas>& studentai, int b)
 {
     double suma; //rezultatui skaiciuoti
+    if(b==0){
     for(int i=0; i<studentai.size(); i++)
     {
         suma=0;
@@ -25,7 +26,8 @@ void Skaiciavimai(std::vector<studentas>& studentai)
         }
         studentai[i].rez=suma/(studentai[i].pazymiai.size()-1)*0.4+studentai[i].pazymiai.back()*0.6;
     }
-    
+    }
+    else {
     //rusiuojame medianai
     for(int i=0; i<studentai.size(); i++) //rikiuojame tik ND, be paskutinio egzamino
     {
@@ -44,6 +46,7 @@ void Skaiciavimai(std::vector<studentas>& studentai)
         else med = (studentai[i].pazymiai[nd / 2 - 1] + studentai[i].pazymiai[nd / 2]) / 2.0;
         studentai[i].rez2=med*0.4+studentai[i].pazymiai.back()*0.6;
     }
+}
 }
 void Spausdinimas(std::vector<studentas>& studentai, int& b)
 {
@@ -247,7 +250,7 @@ while (true)
 }
        studentai.push_back(s);
     }
-    Skaiciavimai(studentai);
+    Skaiciavimai(studentai, b);
     Spausdinimas(studentai, b);
     studentai.clear();
 }
@@ -261,7 +264,7 @@ void AntrasP(std::vector<studentas>& studentai, int& b) //jei pasirinkimas 2
         if (s.vardas == "0") break;
         RandPaz(studentai, s, kiek);
     }
-    Skaiciavimai(studentai);
+    Skaiciavimai(studentai, b);
     Spausdinimas(studentai, b);
     studentai.clear();
 }
@@ -296,7 +299,7 @@ void TreciasP(std::vector<studentas>& studentai, const std::vector<std::string>&
                 }
             RandPaz(studentai, s, kiek);
         }
-        Skaiciavimai(studentai);
+        Skaiciavimai(studentai, b);
         Spausdinimas(studentai, b);
         studentai.clear();
 }
@@ -333,7 +336,7 @@ void KetvirtasP(std::vector<studentas>& studentai, const std::string& CVfd, cons
         std::cerr << "Klaida: " << e.what() << "\n";
         return; 
     }
-    Skaiciavimai(studentai);
+    Skaiciavimai(studentai, b);
     int r; //kintamasis rusiavimui (mazejanciai arba didejanciai)
     int rus; //rusiavimo tipui pasirinkti (vardas, pavarde ir t.t)
             while (true) { 
@@ -432,7 +435,7 @@ void GeneruotiStudentuFaila(const std::string& failoPav, int studentuKiekis, int
     fr.close();
 }
 
-void NuskaitytiIsFailo(std::vector<studentas>& studentai, const std::string& failoPav)
+void NuskaitytiIsFailo(std::vector<studentas>& studentai, const std::string& failoPav, int studentuKiekis)
 {
     std::ifstream fd(failoPav);
     if (!fd.is_open()) {
@@ -440,21 +443,19 @@ void NuskaitytiIsFailo(std::vector<studentas>& studentai, const std::string& fai
     }
 
     studentai.clear();
-    std::string eilute;
-    std::getline(fd, eilute); //praleidziame antraste
+    studentai.reserve(studentuKiekis);
 
-    while (std::getline(fd, eilute)) {
-        std::stringstream st(eilute);
+    std::string antraste;
+    std::getline(fd, antraste);
+    while (true) {
         studentas s;
-        int p;
-        st>>s.vardas>>s.pavarde;
-        s.pazymiai.clear();
-        while (st >> p) {
-            s.pazymiai.push_back(p);
+        s.pazymiai.resize(6); //plius egzaminas
+        if (!(fd >> s.vardas >> s.pavarde)) break;
+        for (int i = 0; i < 6; i++) {
+            fd >> s.pazymiai[i];
         }
         studentai.push_back(s);
     }
-
     fd.close();
 }
 
@@ -554,10 +555,10 @@ void DarbasSuFailu(const std::string& pradinisFailas, const std::string& vargFai
     //1 tyrimo pabaiga
     //2 tyrimo pradzia
     auto startNuskaitymas = high_resolution_clock::now();
-    NuskaitytiIsFailo(studentai, pradinisFailas);
+    NuskaitytiIsFailo(studentai, pradinisFailas, studentuKiekis);
     auto endNuskaitymas = high_resolution_clock::now();
 
-    Skaiciavimai(studentai);
+    Skaiciavimai(studentai, b);
 
     auto startRusiavimas = high_resolution_clock::now();
     RusiuotiStudentus(studentai, b, r, rus);
