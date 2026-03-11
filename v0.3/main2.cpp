@@ -53,7 +53,7 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
 
     //meniu
     int m = 0;
-    while (m != 5) {
+    while (m != 6) {
         cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - nuskaityti duomenis is failo,  5 - generuoti failus, 6 - baigti darba): " << std::endl;
         while(true){
         try{
