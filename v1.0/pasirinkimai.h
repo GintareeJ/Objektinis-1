@@ -149,7 +149,6 @@ void RusiuotiBendras(Konteineris& studentai, int b, int r, int rus)
 }
 
 void RusiuotiBendras(std::list<studentas>& studentai, int b, int r, int rus);
-void Tyrimas1(const std::string& failoPav, int studentuKiekis, int ndKiekis);
 
 template <typename Konteineris>
 void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& failas, int b, int r, int rus)
