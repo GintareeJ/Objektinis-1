@@ -162,11 +162,11 @@ srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
        try
     {
         int ndKiekis = 5;
-        Tyrimas1("studentai1000.txt", 1000, ndKiekis);
-        Tyrimas1("studentai10000.txt", 10000, ndKiekis);
-        Tyrimas1("studentai100000.txt", 100000, ndKiekis);
-        Tyrimas1("studentai1000000.txt", 1000000, ndKiekis);
-        Tyrimas1("studentai10000000.txt", 10000000, ndKiekis);
+        GeneruotiStudentuFaila("studentai1000.txt", 1000, ndKiekis);
+        GeneruotiStudentuFaila("studentai10000.txt", 10000, ndKiekis);
+        GeneruotiStudentuFaila("studentai100000.txt", 100000, ndKiekis);
+        GeneruotiStudentuFaila("studentai1000000.txt", 1000000, ndKiekis);
+        GeneruotiStudentuFaila("studentai10000000.txt", 10000000, ndKiekis);
   
         PenktasP();
     }
