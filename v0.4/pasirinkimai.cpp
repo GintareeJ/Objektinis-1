@@ -541,18 +541,22 @@ void SpausdintiIFaila(const std::string& failoPav, const Konteineris& studentai,
     fr.close();
 }
 
+void Tyrimas1(const std::string& failoPav, int studentuKiekis, int ndKiekis)
+{
+    cout<<"1 TYRIMAS"<<std::endl;
+    auto start = high_resolution_clock::now();
+    GeneruotiStudentuFaila(failoPav, studentuKiekis, ndKiekis);
+    auto end = high_resolution_clock::now();
+    cout<<studentuKiekis<<" irasu failo kurimo laikas: "<<std::chrono::duration<double>(end - start).count()<<" s\n";
+}    
+
+//DarbasSuFailu - antras tyrimas
 void DarbasSuFailu(const std::string& pradinisFailas, const std::string& vargFailas, const std::string& kietFailas, std::vector<studentas>& studentai, std::vector<studentas>& vargsiukai, std::vector<studentas>& kietiakai, int ndKiekis, int studentuKiekis, int r, int rus, int b)
 {
     //2 tyrimo 5 progamos pasirinkimo veikimo laiko pradzia
     cout << "\nFailas: " << pradinisFailas << "\n";
     auto start5 = high_resolution_clock::now();
-    //tyrimas 1 pradzia
-    cout<<"1 TYRIMAS"<<std::endl;
-    auto start = high_resolution_clock::now();
-    GeneruotiStudentuFaila(pradinisFailas, studentuKiekis, ndKiekis);
-    auto end = high_resolution_clock::now();
-    cout<<studentuKiekis<<" irasu failo kurimo laikas: "<< duration<double>(end - start).count() << " s\n";
-    //1 tyrimo pabaiga
+
     //2 tyrimo pradzia
     auto startNuskaitymas = high_resolution_clock::now();
     NuskaitytiIsFailo(studentai, pradinisFailas, studentuKiekis);
@@ -593,9 +597,18 @@ void PenktasP(std::vector<studentas>& studentai, std::vector<studentas>& vargsiu
     r = kintr(r);
     b=kinta();//spausdinimo pasirinkimas;
     int ndKiekis = 5; //pasirinktas bet koks nd kiekis
+    Tyrimas1("studentai1000.txt", 1000, ndKiekis);
     DarbasSuFailu("studentai1000.txt", "vargsiukai1000.txt", "kietiakai1000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 1000, r, rus, b);
+    
+    Tyrimas1("studentai10000.txt", 10000, ndKiekis);
     DarbasSuFailu("studentai10000.txt", "vargsiukai10000.txt", "kietiakai10000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 10000, r, rus, b);
+    
+    Tyrimas1("studentai1000.txt", 100000, ndKiekis);
     DarbasSuFailu("studentai100000.txt", "vargsiukai100000.txt", "kietiakai100000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 100000, r, rus, b);
+    
+    Tyrimas1("studentai1000.txt", 1000000, ndKiekis);
     DarbasSuFailu("studentai1000000.txt", "vargsiukai1000000.txt", "kietiakai1000000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 1000000, r, rus, b);
+    
+    Tyrimas1("studentai1000.txt", 10000000, ndKiekis);
     DarbasSuFailu("studentai10000000.txt", "vargsiukai10000000.txt", "kietiakai10000000.txt", studentai, vargsiukai, kietiakai, ndKiekis, 10000000, r, rus, b);
 }
