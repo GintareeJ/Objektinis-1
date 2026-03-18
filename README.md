@@ -23,6 +23,9 @@ Programoje realizuotas studentų failų generatorius, studentų duomenų nuskait
 - Atlikta programos spartos analizė, testavimas
 
 #### Tyrimai:
+Kompiuterio parametrai:
+![Parametrai](images/pc.png)
+
 Buvo atlikti 2 pagrindiniai tyrimai.
 
 1 tyrimas – failų kūrimo sparta
