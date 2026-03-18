@@ -24,7 +24,7 @@ Programoje realizuotas studentų failų generatorius, studentų duomenų nuskait
 
 #### Tyrimai:
 Kompiuterio parametrai: 
-![Parametrai](images/pc.png)
+![Parametrai](images/PC.png)
 
 Buvo atlikti 2 pagrindiniai tyrimai.
 
