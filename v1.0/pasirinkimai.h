@@ -99,7 +99,7 @@ void NuskaitytiIsFailoBendras(Konteineris& studentai, const std::string& failoPa
 }
 
 template <typename Konteineris>
-void PadalintiStudentusBendras(const Konteineris& studentai, Konteineris& vargsiukai, Konteineris& kietiakai, int b)
+void PadalintiStudentusBendras1(const Konteineris& studentai, Konteineris& vargsiukai, Konteineris& kietiakai, int b) // pagal pirma strategija
 {
     vargsiukai.clear();
     kietiakai.clear();
@@ -114,6 +114,39 @@ void PadalintiStudentusBendras(const Konteineris& studentai, Konteineris& vargsi
         }
     }
 }
+
+template <typename Konteineris>
+void PadalintiStudentusBendras2(Konteineris& studentai, Konteineris& vargsiukai, int b) // pagal antra strategija
+{
+    vargsiukai.clear();
+
+    for (size_t i=0; i<studentai.size();) {
+        if (b == 0) {
+            if (studentai[i].rez < 5.0) 
+            {
+                vargsiukai.push_back(studentai[i]);
+                studentai.erase(studentai.begin() + i);
+            }
+         else
+         {
+            ++i;
+         }
+        } 
+        else {
+            if (studentai[i].rez2 < 5.0) 
+            {
+                vargsiukai.push_back(studentai[i]);
+                studentai.erase(studentai.begin() + i);
+            }
+         else
+         {
+            ++i;
+         }
+        }
+    }
+}
+
+void PadalintiStudentusBendras2(std::list<studentas>& studentai, std::list<studentas>& vargsiukai, int b);
 
 template <typename Konteineris>
 void RusiuotiBendras(Konteineris& studentai, int b, int r, int rus)
@@ -167,15 +200,23 @@ void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& fa
     RusiuotiBendras(studentai, b, r, rus);
     auto endR = high_resolution_clock::now();
 
+ //1 strategija
     auto startD = high_resolution_clock::now();
-    PadalintiStudentusBendras(studentai, vargsiukai, kietiakai, b);
+    PadalintiStudentusBendras1(studentai, vargsiukai, kietiakai, b);
     auto endD = high_resolution_clock::now();
+//2 strategija
+    auto startD2 = high_resolution_clock::now();
+    PadalintiStudentusBendras2(studentai, vargsiukai, b);
+    auto endD2 = high_resolution_clock::now();
 
     cout << "Konteineris: " << konteinerioPav << "\n";
     cout << "Failas: " << failas << "\n";
     cout << "Nuskaitymas: " << duration<double>(endN - startN).count() << " s\n";
     cout << "Rusiavimas: " << duration<double>(endR - startR).count() << " s\n";
+    cout<<"1 STRATEGIJA: \n";
     cout << "Skirstymas: " << duration<double>(endD - startD).count() << " s\n";
+    cout<<"2 STRATEGIJA: \n";
+    cout << "Skirstymas: " << duration<double>(endD2 - startD2).count() << " s\n";
     cout << "-----------------------------------\n";
 }
 #endif
