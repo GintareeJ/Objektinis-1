@@ -202,6 +202,11 @@ void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& fa
     Konteineris vargsiukai;
     Konteineris kietiakai;
 
+    double testuKartai = 3;
+    double nuskaitymas=0;
+    double rusiavimas=0;
+    double skirstymas=0;
+
     if(std::ifstream(failas)) 
     {
        cout<<"Failas "<<failas<<" jau egzistuoja, generavimas praleidziamas.\n";
@@ -209,17 +214,23 @@ void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& fa
     else {
     GeneruotiStudentuFaila(failas, studentuKiekis, ndKiekis);
     }
-
+    for(int i=0; i<testuKartai; i++)
+{
+    //nuskaitymas
     auto startN = high_resolution_clock::now();
     NuskaitytiIsFailoBendras(studentai, failas);
     auto endN = high_resolution_clock::now();
+    nuskaitymas+=duration<double>(endN - startN).count();
 
     SkaiciavimaiBendras(studentai, b);
 
+//rusiavimas
     auto startR = high_resolution_clock::now();
     RusiuotiBendras(studentai, b, r, rus);
     auto endR = high_resolution_clock::now();
-    
+    rusiavimas+=duration<double>(endR - startR).count();
+
+//skirstymas
     auto startD = high_resolution_clock::now();
     //1 strategija
     if(strategija==1) PadalintiStudentusBendras1(studentai, vargsiukai, kietiakai, b);
@@ -227,16 +238,17 @@ void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& fa
     if(strategija==2) PadalintiStudentusBendras2(studentai, vargsiukai, b);
     //3 strategija
     if(strategija==3) PadalintiStudentusBendras3(studentai, vargsiukai, b);
-
     auto endD = high_resolution_clock::now();
+    skirstymas+=duration<double>(endD - startD).count();
+}
     cout << "Konteineris: " << konteinerioPav << "\n";
     cout << "Failas: " << failas << "\n";
-    cout << "Nuskaitymas: " << duration<double>(endN - startN).count() << " s\n";
-    cout << "Rusiavimas: " << duration<double>(endR - startR).count() << " s\n";
+    cout << "Nuskaitymas: " << nuskaitymas/testuKartai << " s\n";
+    cout << "Rusiavimas: " << rusiavimas/testuKartai << " s\n";
     if(strategija==1) cout<<"1 STRATEGIJA: \n";
     if(strategija==2) cout<<"2 STRATEGIJA: \n";
     if(strategija==3) cout<<"3 STRATEGIJA: \n";
-    cout << "Skirstymas: " << duration<double>(endD - startD).count() << " s\n";
+    cout << "Skirstymas: " << skirstymas/testuKartai << " s\n";
     cout << "-----------------------------------\n";
     
 }
