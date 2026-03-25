@@ -4,6 +4,7 @@
 #include "studentas.h"
 #include "rusiavimas.h"
 #include <chrono>
+#include <iostream>
 using namespace std::chrono;
 using std::cout;
 
@@ -184,11 +185,31 @@ void RusiuotiBendras(Konteineris& studentai, int b, int r, int rus)
 void RusiuotiBendras(std::list<studentas>& studentai, int b, int r, int rus);
 
 template <typename Konteineris>
-void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& failas, int b, int r, int rus)
+void PadalintiStudentusBendras3(Konteineris& studentai, Konteineris& vargsiukai, int b) //3 strategija vector greitesniam veikimui
+{
+    vargsiukai.clear();
+
+    auto it = std::stable_partition(studentai.begin(), studentai.end(), [b](const auto& s) { return (b == 0) ? s.rez >= 5.0 : s.rez2 >= 5.0; });
+
+    vargsiukai.assign(it, studentai.end());
+    studentai.erase(it, studentai.end());
+}
+
+template <typename Konteineris>
+void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& failas, int studentuKiekis, int ndKiekis, int b, int r, int rus, int strategija)
 {
     Konteineris studentai;
     Konteineris vargsiukai;
     Konteineris kietiakai;
+
+    if(std::ifstream(failas)) 
+    {
+       cout<<"Failas "<<failas<<" jau egzistuoja, generavimas praleidziamas.\n";
+       return;
+    }
+    else {
+    GeneruotiStudentuFaila(failas, studentuKiekis, ndKiekis);
+    }
 
     auto startN = high_resolution_clock::now();
     NuskaitytiIsFailoBendras(studentai, failas);
@@ -199,24 +220,25 @@ void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& fa
     auto startR = high_resolution_clock::now();
     RusiuotiBendras(studentai, b, r, rus);
     auto endR = high_resolution_clock::now();
-
- //1 strategija
+    
     auto startD = high_resolution_clock::now();
-    PadalintiStudentusBendras1(studentai, vargsiukai, kietiakai, b);
-    auto endD = high_resolution_clock::now();
-//2 strategija
-    auto startD2 = high_resolution_clock::now();
-    PadalintiStudentusBendras2(studentai, vargsiukai, b);
-    auto endD2 = high_resolution_clock::now();
+    //1 strategija
+    if(strategija==1) PadalintiStudentusBendras1(studentai, vargsiukai, kietiakai, b);
+    //2 strategija
+    if(strategija==2) PadalintiStudentusBendras2(studentai, vargsiukai, b);
+    //3 strategija
+    if(strategija==3) PadalintiStudentusBendras3(studentai, vargsiukai, b);
 
+    auto endD = high_resolution_clock::now();
     cout << "Konteineris: " << konteinerioPav << "\n";
     cout << "Failas: " << failas << "\n";
     cout << "Nuskaitymas: " << duration<double>(endN - startN).count() << " s\n";
     cout << "Rusiavimas: " << duration<double>(endR - startR).count() << " s\n";
-    cout<<"1 STRATEGIJA: \n";
+    if(strategija==1) cout<<"1 STRATEGIJA: \n";
+    if(strategija==2) cout<<"2 STRATEGIJA: \n";
+    if(strategija==3) cout<<"3 STRATEGIJA: \n";
     cout << "Skirstymas: " << duration<double>(endD - startD).count() << " s\n";
-    cout<<"2 STRATEGIJA: \n";
-    cout << "Skirstymas: " << duration<double>(endD2 - startD2).count() << " s\n";
     cout << "-----------------------------------\n";
+    
 }
 #endif
