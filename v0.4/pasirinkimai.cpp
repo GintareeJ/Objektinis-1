@@ -6,6 +6,7 @@
 #include <sstream>
 #include <chrono>
 #include <random>
+#include <iostream>
 
 #include "rusiavimas.h"
 #include "studentas.h"
@@ -435,7 +436,7 @@ void GeneruotiStudentuFaila(const std::string& failoPav, int studentuKiekis, int
     fr.close();
 }
 
-void NuskaitytiIsFailo(std::vector<studentas>& studentai, const std::string& failoPav, int studentuKiekis)
+void NuskaitytiIsFailo(std::vector<studentas>& studentai, const std::string& failoPav, int studentuKiekis, int ndKiekis)
 {
     std::ifstream fd(failoPav);
     if (!fd.is_open()) {
@@ -449,9 +450,9 @@ void NuskaitytiIsFailo(std::vector<studentas>& studentai, const std::string& fai
     std::getline(fd, antraste);
     while (true) {
         studentas s;
-        s.pazymiai.resize(6); //plius egzaminas
+        s.pazymiai.resize(ndKiekis+1); //plius egzaminas
         if (!(fd >> s.vardas >> s.pavarde)) break;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < ndKiekis + 1; i++) {
             fd >> s.pazymiai[i];
         }
         studentai.push_back(s);
@@ -543,7 +544,12 @@ void SpausdintiIFaila(const std::string& failoPav, const Konteineris& studentai,
 
 void Tyrimas1(const std::string& failoPav, int studentuKiekis, int ndKiekis)
 {
-    cout<<"1 TYRIMAS"<<std::endl;
+    if(std::ifstream(failoPav)) 
+    {
+        cout<<"Failas "<<failoPav<<" jau egzistuoja, generavimas praleidziamas.\n";
+        return;
+    }
+    cout<<"1 TYRIMAS (atliktas su neegzistuojanciais failais)"<<std::endl;
     auto start = high_resolution_clock::now();
     GeneruotiStudentuFaila(failoPav, studentuKiekis, ndKiekis);
     auto end = high_resolution_clock::now();
@@ -553,38 +559,60 @@ void Tyrimas1(const std::string& failoPav, int studentuKiekis, int ndKiekis)
 //DarbasSuFailu - antras tyrimas
 void DarbasSuFailu(const std::string& pradinisFailas, const std::string& vargFailas, const std::string& kietFailas, std::vector<studentas>& studentai, std::vector<studentas>& vargsiukai, std::vector<studentas>& kietiakai, int ndKiekis, int studentuKiekis, int r, int rus, int b)
 {
-    //2 tyrimo 5 progamos pasirinkimo veikimo laiko pradzia
+    double testuKartai = 3;
+    double nuskaitymas=0;
+    double rusiavimas=0;
+    double dalijimas=0;
+    double irasymasV=0;
+    double irasymasK=0;
+    double visas=0;
+
     cout << "\nFailas: " << pradinisFailas << "\n";
+    for(int i=0; i<testuKartai; i++){
+    //2 tyrimo 5 progamos pasirinkimo veikimo laiko pradzia
     auto start5 = high_resolution_clock::now();
 
     //2 tyrimo pradzia
     auto startNuskaitymas = high_resolution_clock::now();
-    NuskaitytiIsFailo(studentai, pradinisFailas, studentuKiekis);
+    NuskaitytiIsFailo(studentai, pradinisFailas, studentuKiekis, ndKiekis);
     auto endNuskaitymas = high_resolution_clock::now();
+    nuskaitymas+=duration<double>(endNuskaitymas - startNuskaitymas).count();
 
     Skaiciavimai(studentai, b);
 
     auto startRusiavimas = high_resolution_clock::now();
     RusiuotiStudentus(studentai, b, r, rus);
     auto endRusiavimas = high_resolution_clock::now();
+    rusiavimas+=duration<double>(endRusiavimas - startRusiavimas).count();
 
     auto startDalijimas = high_resolution_clock::now();
     PadalintiStudentus(studentai, vargsiukai, kietiakai, b);
     auto endDalijimas = high_resolution_clock::now();
+    dalijimas+=duration<double>(endDalijimas - startDalijimas).count();
 
-    auto startIsvedimas = high_resolution_clock::now();
+    auto startIsvedimas1 = high_resolution_clock::now();
     SpausdintiIFaila(vargFailas, vargsiukai, b);
+    auto endIsvedimas1 = high_resolution_clock::now();
+    irasymasV+=duration<double>(endIsvedimas1 - startIsvedimas1).count();
+
+    auto startIsvedimas2 = high_resolution_clock::now();
     SpausdintiIFaila(kietFailas, kietiakai, b);
-    auto endIsvedimas = high_resolution_clock::now();
+    auto endIsvedimas2 = high_resolution_clock::now();
+    irasymasK+=duration<double>(endIsvedimas2 - startIsvedimas2).count();
+
     //2 tyrimo pabaiga
 
     auto end5 = high_resolution_clock::now();
+    visas+=duration<double>(end5 - start5).count();
+    }
     //2 tyrimo 5 progamos pasirinkimo veikimo laiko pabaiga
-    cout << "Nuskaitymo is failo laikas: "<< duration<double>(endNuskaitymas - startNuskaitymas).count() << " s\n";
-    cout << "Rusiavimo laikas: "<< duration<double>(endRusiavimas - startRusiavimas).count() << " s\n";
-    cout << "Padalijimo i dvi grupes laikas: "<< duration<double>(endDalijimas - startDalijimas).count() << " s\n";
-    cout << "Isvedimo i du failus laikas: "<< duration<double>(endIsvedimas - startIsvedimas).count() << " s\n";
-    cout << "Visas failo apdorojimo laikas: "<< duration<double>(end5 - start5).count() << " s\n";
+    cout << "2 tyrimas (naudoti anksciau sugeneruoti failai): \n";
+    cout << "Nuskaitymo is failo laikas: "<< nuskaitymas/testuKartai << " s\n";
+    cout << "Rusiavimo laikas: "<< rusiavimas/testuKartai << " s\n";
+    cout << "Padalijimo i dvi grupes laikas: "<< dalijimas/testuKartai << " s\n";
+    cout << "Vargsiuku isvedimo i faila laikas: "<< irasymasV/testuKartai << " s\n";
+    cout << "Kietiaku isvedimo i faila laikas: "<< irasymasK/testuKartai << " s\n";
+    cout << "Visas failo apdorojimo laikas: "<< visas/testuKartai << " s\n";
     cout<<std::endl;
 }
 

@@ -34,6 +34,7 @@ double suma6=0; //duomenu spausdinimui faile
 int spausd;
 int b;
 bool skaitytaIsFailo = false;
+int ndKiekis=5;
 
 std::string CVfd;
 std::string CVfr="rezultatas.txt";
