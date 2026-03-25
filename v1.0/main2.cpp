@@ -1,497 +1,195 @@
 #include <iostream>
-#include <algorithm>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include <chrono>
-#include <random>
+#include <vector>
 #include <list>
 #include <deque>
-#include <vector>
-
-#include "pasirinkimai.h"
-#include "rusiavimas.h"
+#include <string>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+#include <algorithm>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <chrono>
 #include "studentas.h"
+#include "rusiavimas.h"
+#include "pasirinkimai.h"
 
-using namespace std;
+using std::cin;
+using std::string;
+using std::cout;
 using namespace std::chrono;
 
-void Skaiciavimai(std::vector<studentas>& studentai, int b)
-{
-    double suma; //rezultatui skaiciuoti
-    if(b==0){
-    for(int i=0; i<studentai.size(); i++)
-    {
-        suma=0;
-        for(int j=0; j<studentai[i].pazymiai.size(); j++)
-        {
-            if (j != studentai[i].pazymiai.size() - 1) suma+=studentai[i].pazymiai[j]; //sumuojame, tik jei j nera egzamino pazymio numeris
-        }
-        studentai[i].rez=suma/(studentai[i].pazymiai.size()-1)*0.4+studentai[i].pazymiai.back()*0.6;
-    }
-    }
-    else {
-    //rusiuojame medianai
-    for(int i=0; i<studentai.size(); i++) //rikiuojame tik ND, be paskutinio egzamino
-    {
-        if(studentai[i].pazymiai.size() > 1) {
-            std::sort(studentai[i].pazymiai.begin(), studentai[i].pazymiai.end() - 1);
-        }
-    }
-    //skaiciuojame mediana ir bendra bala
-        for(int i=0; i<studentai.size(); i++)
-    {
-        int k = studentai[i].pazymiai.size();
-        int nd = k - 1;
 
-        double med;
-        if (nd % 2 == 1) med = studentai[i].pazymiai[nd / 2];
-        else med = (studentai[i].pazymiai[nd / 2 - 1] + studentai[i].pazymiai[nd / 2]) / 2.0;
-        studentai[i].rez2=med*0.4+studentai[i].pazymiai.back()*0.6;
+//darbas atliktas su vector konteineriu
+
+
+int main() {
+double suma1=0; //visam programos vykdymui
+double suma2=0; //duomenu nuskaitymui
+double suma3=0; //duomenu rusiavimui ekrane
+double suma4=0; //duomenu rusiavimui faile
+double suma5=0; //duomenu spausdinimui ekrane
+double suma6=0; //duomenu spausdinimui faile
+int spausd;
+int b;
+bool skaitytaIsFailo = false;
+int strategija;
+int studentuKiekis;
+
+std::string CVfd;
+std::string CVfr="rezultatas.txt";
+string pavardes[] = { "Kazlauskas", "Petrauskas", "Jankauskas", "Vaitkus", "Kazlauskaite", "Petrauskaite", "Jankauskaite", "Vaitkute" };
+string vardai[] = { "Jonas", "Petras", "Mantas", "Lukas", "Tomas", "Ieva", "Aiste", "Monika", "Greta", "Laura" };
+int pavN = sizeof(pavardes) / sizeof(pavardes[0]);
+int vardN = sizeof(vardai) / sizeof(vardai[0]);
+std::vector<std::string> pavardesVec(pavardes, pavardes + pavN);
+std::vector<std::string> vardaiVec(vardai, vardai + vardN);
+
+std::vector<studentas> studentai;
+std::vector<studentas> vargsiukai;
+std::vector<studentas> kietiakai;
+srand(time(nullptr)); //kad kiekviena karta butu generuojami skirtingi pazymiai
+
+    auto start1 = high_resolution_clock::now(); 
+
+    //meniu
+    int m = 0;
+    while (m != 6) {
+        cout << "Pasirinkite, kokiu budu norite, kad programa vykdytu uzduoti (1 - duomenu irasymas ranka, 2 - generuoti tik pazymius, 3 - generuoti studentu vardus, pavardes ir pazymius, 4 - nuskaityti duomenis is failo,  5 - generuoti failus, 6 - baigti darba): " << std::endl;
+        while(true){
+        try{
+        cin >> m;
+        if(std::cin.fail()) 
+           throw std::invalid_argument("Ivesta reiksme nera skaicius");
+        if (m<1||m>6) 
+            throw std::out_of_range("Tokio pasirinkimo nera");
+
+        break;
+        }
+        catch (const std::exception& e) {
+        cout << "Klaida: " << e.what() << std::endl;
+        cin.clear();
+        cin.ignore(10000, '\n'); //pasirenkamas didelis skaicius, kad tikrai butu isvalyta ivedimo reiksme
     }
-}
-}
-void Spausdinimas(std::vector<studentas>& studentai, int& b)
-{
-    b=kinta();
-            if (b == 0)
+        }
+        if(m==1) 
+        {
+        try
+        {
+            PirmasP(studentai, b);
+        }
+         catch (const std::exception& e)
             {
-                cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Vid.)" << "\n";
-                cout << "-----------------------------------------------\n";
-                for (int i = 0; i < studentai.size(); i++) {
-                    cout << std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<< std::fixed << std::setprecision(2) << studentai[i].rez << "\n";
-                }
-                cout << "-----------------------------------------------\n";
-            }
-            else {
-                cout << std::left << std::setw(15) << "Pavarde" << std::left << std::setw(15) << "Vardas" << std::left << std::setw(15) << "Galutinis (Med.)" << "\n";
-                cout << "-----------------------------------------------\n";
-                for (int i = 0; i < studentai.size(); i++) {
-                    cout << std::left << std::setw(15) << studentai[i].pavarde << std::left << std::setw(15) << studentai[i].vardas<<std::fixed << std::setprecision(2) << studentai[i].rez2 << "\n";
-                }
-                cout << "-----------------------------------------------\n";
-            }
-}
-void VardasPavarde(std::vector<studentas>& studentai, studentas& s)
-{
-    while (true) {
-    try {
-        cout << "Iveskite studento varda (0 - baigti): ";
-        cin >> s.vardas;
-
-        if (s.vardas == "0")
-            return;
-
-        for (char c : s.vardas) { //Tikriname ar visi simboliai yra raides
-            if (!isalpha(c)) {
-                throw std::invalid_argument("Varda gali sudaryti tik raides.");
+                cout<< "Klaida: "<<e.what()<<std::endl;
             }
         }
+        if(m==2) 
+        {
+        try
+        {
+            AntrasP(studentai, b);
+        }
+         catch (const std::exception& e)
+            {
+                cout<< "Klaida: "<<e.what()<<std::endl;
+            }
+        }
+        if(m==3) 
+        {
+            try
+            {
+                {TreciasP(studentai, pavardesVec, vardaiVec, b);}
+            }
+            catch(const std::exception& e)
+            {
+                std::cout<<"Klaida: "<< e.what() <<std::endl;
+            }
+        }
+        if(m==4) 
+        {
+    cout << "Pasirinkite faila:\n";
+    cout << "1 - studentai10000.txt\n";
+    cout << "2 - studentai100000.txt\n";
+    cout << "3 - studentai1000000.txt\n";
+
+    std::ios::sync_with_stdio(false);
+    cin.tie(nullptr); //del greitesnio duomenu spausdinimo
+
+    int pasirinkimas;
+    while(true)
+    {
+        try {
+            cin>>pasirinkimas;
+        if (cin.fail())
+            throw std::invalid_argument("Ivestas ne skaicius\n");
+
+        if (pasirinkimas != 1 && pasirinkimas!= 2&& pasirinkimas!=3)
+            throw std::out_of_range("Galimi tik 1, 2 arba 3\n");
+
         break;
     }
     catch (const std::exception& e) {
-        cout << "Klaida: " << e.what() <<" Bandykite dar karta:\n"<< endl;
-    }
-}
-while (true) {
-    try {   
-        cout << "Iveskite pavarde: ";
-        cin >> s.pavarde;
-
-        for (char c : s.pavarde) { //Tikriname ar visi simboliai yra raides
-            if (!isalpha(c)) {
-                throw std::invalid_argument("Pavarde gali sudaryti tik raides.");
-            }
-        }
-        break;
-    }
-    catch (const std::exception& e) {
-        cout << "Klaida: " << e.what() << " Bandykite dar karta:\n"<<endl;
-    }
-}
-}
-void RandPaz(std::vector<studentas>& studentai, studentas& s, int& kiek)
-{
-
-    if(kiek==0){
-    cout << "Pazymiai bus generuojami automatiskai, iveskite pazymiu kieki (min 2): ";
-    while (true) {
-    cin >> kiek;
-
-    if (cin.fail()) {
-        cout << "Iveskite skaiciu!\n";
+        cout << "Klaida: " << e.what() << "bandykite dar karta:\n"<<std::endl;
         cin.clear();
-        cin.ignore(10000, '\n');
-        continue;
+        cin.ignore(10000, '\n'); //pasirenkamas didelis skaicius, kad tikrai butu isvalyta ivedimo reiksme
     }
-
-    if (kiek < 2) {
-        cout << "Pazymiu kiekis turi buti ne mazesnis nei 2, bandykite dar karta:\n";
-        continue;
     }
-
-    break;
-}
-    }
-        s.pazymiai.clear();
-        s.pazymiai.resize(kiek);
-        for(int i = 0; i < kiek; i++)
-        {
-            s.pazymiai[i] = rand() % 10 + 1;
-        }
-        studentai.push_back(s);
-}
-
-int kinta()
-{
-    int a;
-    while (true) {   
-            cout << "Pasirinkite, kaip norite, kad butu skaiciuojamas galutinis balas - Vid (0) arba Med (1):" << std::endl;
-            cin>>a; 
-            if (cin.fail()) 
-            { 
-                cout << "Iveskite skaiciu: \n"; 
-                cin.clear(); 
-                cin.ignore(10000, '\n'); //pasirenkamas didelis sk, kad ivedimo reiksme tikrai butu isvalyta
-                continue; 
-
-            }
-            if (a!=0&&a!=1) { 
-                cout << "Skaicius turi buti 1 arba 0: \n"; 
-                continue; }
-
-                break;
-            }
-    return a;
-}
-
-int kintrus(int& rus)
-{
-    int x;
-    while (true) { 
-            cout<<"Pasirinkite, pagal ka norite, jog butu suriuosatas studentu sarasas: 0 - vardas, 1 - pavarde, 2 - galutinis rez. (vid. arba med.)"<<std::endl;
-            cin>>x; 
-            if (cin.fail()) 
-            { 
-                cout << "Iveskite skaiciu: \n"; 
-                cin.clear(); 
-                cin.ignore(10000, '\n'); 
-                continue; 
-            }
-            if (x!=0&&x!=1&&x!=2) { 
-                cout << "Skaicius turi buti 2, 1 arba 0: \n"; 
-                continue;
-            }
-
-            break;
-        }
-        return rus=x;
-}
-
-int kintr(int& r)
-{
-    int x;
-  while (true) { 
-    cout<<"Ar norite, jog jusu pasirinkimas butu surusiuotas didejanciai (0) ar mazejanciai (1)?"<<std::endl;
-    cin>>x; 
-    if (cin.fail()) 
-    { 
-        cout << "Iveskite skaiciu: \n"; 
-        cin.clear(); 
-        cin.ignore(10000, '\n'); 
-        continue; 
-    }
-        if (x!=0&&x!=1) { 
-        cout << "Skaicius turi buti 1 arba 0: \n"; 
-        continue; }
-                        
-        break;
-    }
-    return r=x;
-}
-
-void PirmasP(std::vector<studentas>& studentai, int& b) //jei pasirinkimas 1
-{
-while (true) {
-studentas s;
-bool buvonulis = false;
-VardasPavarde(studentai, s);
-if (s.vardas == "0") break;
-int p;
-cout << "Iveskite pazymius (0 - baigti), paskutinis egzaminas (min 2): ";
-while (true)
-{
-    cin >> p;
-
-    if (cin.fail()) {
-        cout << "Iveskite skaiciu: \n";
-        cin.clear();
-        cin.ignore(10000, '\n');
-        continue;
-    }
-
-    if (p == 0) {
-        buvonulis=true;
-        if (s.pazymiai.size() < 2) {
-            cout << "Reikia ivesti bent 2 pazymius (paskutinis - egzaminas), veskite dar karta: \n";
-            continue;
-        }
-        break;
-    }
-
-    if (p < 1 || p > 10) {
-        cout << "Pazymys turi buti tarp 1 ir 10, veskite dar karta: \n";
-        cin.ignore(10000, '\n'); //kad jei visi skaiciai daugiau uz 10, klaida rasyti viena
-        continue;
-    }
-    s.pazymiai.push_back(p);
-    if (!buvonulis) 
+    if (pasirinkimas==1)
     {
-        cout << "Ivedimas turi buti uzbaigtas 0.\n";
-        buvonulis=true; //kad nekartotu pranesimo
+        CVfd = "studentai10000.txt";
+        studentai.reserve(10000);
     }
-}
-       studentai.push_back(s);
-    }
-    Skaiciavimai(studentai, b);
-    Spausdinimas(studentai, b);
-    studentai.clear();
-}
-
-void AntrasP(std::vector<studentas>& studentai, int& b) //jei pasirinkimas 2
-{
-    int kiek=0;
-    while (true) {
-        studentas s;
-        VardasPavarde(studentai, s);
-        if (s.vardas == "0") break;
-        RandPaz(studentai, s, kiek);
-    }
-    Skaiciavimai(studentai, b);
-    Spausdinimas(studentai, b);
-    studentai.clear();
-}
-
-void TreciasP(std::vector<studentas>& studentai, const std::vector<std::string>& pavardes,  const std::vector<std::string>& vardai, int& b) //jei pasirinkitas 3
-{
-    studentas s;
-        int skiek; //studentu kiekis
-        int kiek=0; //pazymiams
-        int vardN = vardai.size();
-        int pavN = pavardes.size();
-        cout << "Sudentu vardai ir pavardes bus generuojami automatiskai, iveskite studentu kieki: ";
-        while (true) {
-       cin >> skiek;
-
-    if (cin.fail()) {
-        cout << "Iveskite skaiciu!\n";
-        cin.clear();
-        cin.ignore(10000, '\n');
-        continue;
-    }
-
-    break;
-}
-        for(int i=0; i<skiek; i++)
-        {
-            s.vardas = vardai[rand() % vardN];
-                if (s.vardas.back() == 's') {
-                    do { s.pavarde = pavardes[rand() % pavN]; } while (s.pavarde.back() != 's');
-                } else {
-                    do { s.pavarde = pavardes[rand() % pavN]; } while (s.pavarde.back() == 's');
-                }
-            RandPaz(studentai, s, kiek);
-        }
-        Skaiciavimai(studentai, b);
-        Spausdinimas(studentai, b);
-        studentai.clear();
-}
-
-void KetvirtasP(std::vector<studentas>& studentai, const std::string& CVfd, const std::string& CVfr,
-                double& suma2, double& suma3, double& suma4, double& suma5, double& suma6,
-                int& spausd, bool& skaitytaIsFailo, int& b)
-{
-    skaitytaIsFailo = true;
-
-    try {
-        auto start2 = high_resolution_clock::now();
-        NuskaitytiIsFailoBendras(studentai, CVfd);
-        auto end2 = high_resolution_clock::now();
-        suma2 = duration<double>(end2 - start2).count();
-    }
-    catch (const std::exception& e) {
-        cerr << "Klaida: " << e.what() << "\n";
-        return;
-    }
-
-    SkaiciavimaiBendras(studentai, b);
-
-    int r;
-    int rus;
-
-    while (true) {
-        cout << "Pasirinkite, kur norite, kad butu spausdinami duomenys (0 - faile, 1 - ekrane): " << endl;
-        cin >> spausd;
-
-        if (cin.fail()) {
-            cout << "Iveskite skaiciu: \n";
-            cin.clear();
-            cin.ignore(10000, '\n');
-            continue;
-        }
-        if (spausd != 0 && spausd != 1) {
-            cout << "Skaicius turi buti 1 arba 0: \n";
-            continue;
-        }
-        break;
-    }
-
-    b = kinta();
-    rus = kintrus(rus);
-    r = kintr(r);
-
-    if (spausd == 1)
+    else if (pasirinkimas == 2)
     {
-        auto start3 = high_resolution_clock::now();
-        RusiuotiBendras(studentai, b, r, rus);
-        auto end3 = high_resolution_clock::now();
-        suma3 = duration<double>(end3 - start3).count();
-
-        auto start5 = high_resolution_clock::now();
-
-        if (b == 0)
-        {
-            cout << left << setw(15) << "Pavarde" << left << setw(15) << "Vardas" << left << setw(15) << "Galutinis (Vid.)" << "\n";
-            cout << "-----------------------------------------------\n";
-            for (const auto& s : studentai) {
-                cout << left << setw(15) << s.pavarde << left << setw(15) << s.vardas
-                     << fixed << setprecision(2) << s.rez << "\n";
-            }
-            cout << "-----------------------------------------------\n";
-        }
-        else
-        {
-            cout << left << setw(15) << "Pavarde" << left << setw(15) << "Vardas" << left << setw(15) << "Galutinis (Med.)" << "\n";
-            cout << "-----------------------------------------------\n";
-            for (const auto& s : studentai) {
-                cout << left << setw(15) << s.pavarde << left << setw(15) << s.vardas
-                     << fixed << setprecision(2) << s.rez2 << "\n";
-            }
-            cout << "-----------------------------------------------\n";
-        }
-
-        auto end5 = high_resolution_clock::now();
-        suma5 = duration<double>(end5 - start5).count();
+       CVfd = "studentai100000.txt";
+       studentai.reserve(100000);
     }
-    else
+    else if (pasirinkimas == 3)
     {
-        auto start4 = high_resolution_clock::now();
-        RusiuotiBendras(studentai, b, r, rus);
-        auto end4 = high_resolution_clock::now();
-        suma4 = duration<double>(end4 - start4).count();
-
-        auto start6 = high_resolution_clock::now();
-        SpausdintiIFaila(CVfr, studentai, b);
-        auto end6 = high_resolution_clock::now();
-        suma6 = duration<double>(end6 - start6).count();
+        CVfd = "studentai1000000.txt";
+        studentai.reserve(1000000);
+    }   
+     try
+    {
+        KetvirtasP(studentai, CVfd, CVfr, suma2, suma3, suma4, suma5, suma6, spausd, skaitytaIsFailo, b);
     }
+    catch (const std::exception& e)
+    {
+        cout<< "Klaida: "<<e.what()<<std::endl;
+    }
+        }
+    if(m==5) 
+    {
+       try
+    {
+        PenktasP();
+    }
+        catch (const std::exception& e)
+        {
+            cout<< "Klaida: "<<e.what()<<std::endl;
+        }
+    }
+    
+    if (m == 6) cout << "Baigiamas darbas.\n";
+    
+    } 
+    auto end1 = high_resolution_clock::now();
+    suma1 += duration<double>(end1 - start1).count();
 
-    studentai.clear();
-}
-
-void GeneruotiStudentuFaila(const std::string& failoPav, int studentuKiekis, int ndKiekis)
+cout<<"\nProgramos vykdymo laikas: "<<suma1<<"s"<<std::endl;
+if(skaitytaIsFailo){
+cout<<"Programos duomenu nuskaitymo is failo laikas: "<<suma2<<"s"<<std::endl;
+if(spausd==1)
 {
-    std::ofstream fr(failoPav);
-    if (!fr.is_open()) {
-        throw std::runtime_error("Nepavyko sukurti failo");
-    }
-
-    //spausdiname antraste
-    fr << std::left << std::setw(20) << "Vardas" << std::left << std::setw(20) << "Pavarde";
-
-    for (int i = 1; i <= ndKiekis; i++) {
-        fr << std::left << std::setw(8) <<("ND" + std::to_string(i));
-    }
-    fr << std::left << std::setw(8) << "Egz." << "\n";
-
-    std::mt19937 gen(std::random_device{}());
-    std::uniform_int_distribution<int> pazymys(1, 10);
-
-    for (int i = 1; i <= studentuKiekis; i++) {
-        fr << std::left << std::setw(20) <<("VardasNR" + std::to_string(i))<< std::left << std::setw(20) <<("PavardeNR" + std::to_string(i));
-        for (int j = 0; j < ndKiekis; j++) {
-            fr << std::left << std::setw(8) << pazymys(gen);
-        }
-        fr << std::left << std::setw(8) << pazymys(gen) << "\n";
-    }
-
-    fr.close();
+   cout<<"Programos duomenu rusiavimo laikas: "<<suma3<<"s"<<std::endl;
+   cout<<"Programos duomenu spausdinimo laikas: "<<suma5<<"s"<<std::endl;
 }
-
-void PenktasP()
+if(spausd==0)
 {
-    int b;
-    int rus;
-    int r;
-
-    rus = kintrus(rus);
-    r = kintr(r);
-    b = kinta();
-
-    cout << "\n1000 irasu\n";
-    TestuotiKonteineri<std::vector<studentas>>("vector", "studentai1000.txt", b, r, rus);
-    TestuotiKonteineri<std::list<studentas>>("list", "studentai1000.txt", b, r, rus);
-    TestuotiKonteineri<std::deque<studentas>>("deque", "studentai1000.txt", b, r, rus);
-
-    cout << "\n10000 irasu\n";
-    TestuotiKonteineri<std::vector<studentas>>("vector", "studentai10000.txt", b, r, rus);
-    TestuotiKonteineri<std::list<studentas>>("list", "studentai10000.txt", b, r, rus);
-    TestuotiKonteineri<std::deque<studentas>>("deque", "studentai10000.txt", b, r, rus);
-
-    cout << "\n100000 irasu\n";
-    TestuotiKonteineri<std::vector<studentas>>("vector", "studentai100000.txt", b, r, rus);
-    TestuotiKonteineri<std::list<studentas>>("list", "studentai100000.txt", b, r, rus);
-    TestuotiKonteineri<std::deque<studentas>>("deque", "studentai100000.txt", b, r, rus);
-
-    cout << "\n1000000 irasu\n";
-    TestuotiKonteineri<std::vector<studentas>>("vector", "studentai1000000.txt", b, r, rus);
-    TestuotiKonteineri<std::list<studentas>>("list", "studentai1000000.txt", b, r, rus);
-    TestuotiKonteineri<std::deque<studentas>>("deque", "studentai1000000.txt", b, r, rus);
-
-    cout << "\n10000000 irasu\n";
-    TestuotiKonteineri<std::vector<studentas>>("vector", "studentai10000000.txt", b, r, rus);
-    TestuotiKonteineri<std::list<studentas>>("list", "studentai10000000.txt", b, r, rus);
-    TestuotiKonteineri<std::deque<studentas>>("deque", "studentai10000000.txt", b, r, rus);
+   cout<<"Programos duomenu rusiavimo laikas: "<<suma4<<"s"<<std::endl;
+   cout<<"Programos duomenu spausdinimo faile laikas: "<<suma6<<"s"<<std::endl;
 }
-
-void RusiuotiBendras(std::list<studentas>& studentai, int b, int r, int rus) //jei list
-{
-    if (b == 0) {
-        if (rus == 0) {
-            if (r == 0) studentai.sort(DidVar);
-            else studentai.sort(MazVar);
-        }
-        else if (rus == 1) {
-            if (r == 0) studentai.sort(DidPav);
-            else studentai.sort(MazPav);
-        }
-        else {
-            if (r == 0) studentai.sort(DidVid);
-            else studentai.sort(MazVid);
-        }
-    }
-    else {
-        if (rus == 0) {
-            if (r == 0) studentai.sort(DidVar);
-            else studentai.sort(MazVar);
-        }
-        else if (rus == 1) {
-            if (r == 0) studentai.sort(DidPav);
-            else studentai.sort(MazPav);
-        }
-        else {
-            if (r == 0) studentai.sort(DidMed);
-            else studentai.sort(MazMed);
-        }
-    }
+}
+  return 0;
 }
