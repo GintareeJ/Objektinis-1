@@ -10,7 +10,7 @@ using std::cout;
 
 void Skaiciavimai(std::vector<studentas>& studentai, int b);
 void Spausdinimas(std::vector<studentas>& studentai, int& b);
-void VardasPavarde(std::vector<studentas>& studentai, studentas& s);
+void VardasPavarde(studentas& s);
 int kinta();
 int kintrus(int& rus);
 int kintr(int& r);
@@ -50,7 +50,7 @@ void SkaiciavimaiBendras(Konteineris& studentai, int b)
     if (b == 0) {
         for (auto& s : studentai) {
             double suma = 0.0;
-            for (int j = 0; j + 1 < s.pazymiai.size(); j++) {
+            for (size_t j = 0; j + 1 < s.pazymiai.size(); j++) {
                 suma += s.pazymiai[j];
             }
             s.rez = suma / (s.pazymiai.size() - 1) * 0.4 + s.pazymiai.back() * 0.6;
@@ -205,7 +205,6 @@ void TestuotiKonteineri(const std::string& konteinerioPav, const std::string& fa
     if(std::ifstream(failas)) 
     {
        cout<<"Failas "<<failas<<" jau egzistuoja, generavimas praleidziamas.\n";
-       return;
     }
     else {
     GeneruotiStudentuFaila(failas, studentuKiekis, ndKiekis);
