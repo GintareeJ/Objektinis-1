@@ -1,7 +1,15 @@
 # Programa analizuojanti studentų duomenis
 
 ## Naudojimosi instrukcija
-x
+1. Atsidarykite savo OS terminalą
+2. Jei naudojate Windows, rekomenduojama naudoti MSYS2 aplinką:
+   - Atsisiųsti: https://www.msys2.org/
+   - Paleisti „MSYS2 UCRT64“ terminalą
+   - Įdiegti reikalingus įrankius: pacman -S mingw-w64-ucrt-x86_64-gcc make git
+3. Įveskite šią eilutę: git clone https://github.com/GintareeJ/Objektinis-1
+4. Pereikite į projekto katalogą: cd Objektinis-1
+5. Įrašykite "make run" norėdami paleisti programą
+6. Jei norite ištrinti sukompiliuotą failą, įrašykite "make clean"
 
 ## Ankstesni release: 
 ### v0.1
